@@ -1,0 +1,532 @@
+:root {
+    --background: #e0e5ec;
+    --text-color: #2d3748;
+    --shadow-light: #ffffff;
+    --shadow-dark: #a3b1c6;
+    --accent-color: #4CAF50;
+    --accent-hover: #45a049;
+    --error-color: #f44336;
+    --success-color: #4CAF50;
+    --border-radius: 10px;
+    --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    --background-dark: #2d3748;
+    --text-color-dark: #e2e8f0;
+    --shadow-light-dark: #4a5568;
+    --shadow-dark-dark: #1a202c;
+    --accent-color-dark: #68D391;
+    --accent-hover-dark: #48BB78;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    
+    line-height: 1.6;
+    color: var(--text-color);
+    --s: 36px; /* control the size */
+    --c1: #000000;
+    --c2: #d2d3d5;
+    --c3: #727c7e;
+    --c4: #f1f1f1;
+
+    --g1: conic-gradient(at calc(250%/3) calc(50%/3),var(--c2) 60deg,transparent 0 300deg,var(--c1) 0);
+    --g2: conic-gradient(at calc(50%/3) 50%,transparent 75%,var(--c1) 0);
+    --g3: conic-gradient(at calc(100%/3) 50%,transparent 75%,var(--c2) 0);
+    --g4: conic-gradient(from 59deg at calc(200%/3) calc(249%/9),var(--c3) 61deg,transparent 62deg);
+    --g5: conic-gradient(from 60deg at 50% calc(250%/3),var(--c4) 60deg,var(--c1) 0 120deg,transparent 0);
+    
+    --_p: calc(9*tan(30deg)*var(--s));
+    background:
+        var(--g1) calc(-1*var(--s)) 0,var(--g1) calc(2*var(--s)) var(--_p),
+        var(--g2),var(--g2) calc(3*var(--s)) var(--_p),
+        var(--g3),var(--g3) calc(3*var(--s)) var(--_p),
+        var(--g4),var(--g4) calc(3*var(--s)) var(--_p),
+        var(--g5) calc(3*var(--s)) 0,var(--g5) 0 var(--_p) var(--c3);
+    background-size: calc(6*var(--s)) calc(2*var(--_p));
+    margin: 0;
+    padding: 20px;
+    transition: background-color 0.3s ease;
+}
+
+body.dark-mode {
+    background-color: var(--background-dark);
+    color: var(--text-color-dark);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: rgba(224, 229, 236, 0.95);
+    padding: 20px;
+    border-radius: var(--border-radius);
+    box-shadow: 
+        10px 10px 20px var(--shadow-dark),
+        -10px -10px 20px var(--shadow-light);
+}
+
+h1, h2, h3 {
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: var(--text-color);
+    margin-bottom: 25px;
+    text-align: center;
+    text-shadow: 2px 2px 4px var(--shadow-light);
+    position: relative;
+}
+
+h1::after, h2::after, h3::after {
+    content: '';
+    display: block;
+    width: 50px;
+    height: 4px;
+    background: var(--accent-color);
+    margin: 15px auto 0;
+    border-radius: 2px;
+    box-shadow: 
+        3px 3px 5px var(--shadow-dark),
+        -3px -3px 5px var(--shadow-light);
+}
+
+.tabs {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 40px;
+    background-color: var(--background);
+    padding: 20px;
+    border-radius: var(--border-radius);
+    box-shadow: 
+        inset 8px 8px 16px var(--shadow-dark),
+        inset -8px -8px 16px var(--shadow-light);
+}
+
+.tab {
+    padding: 15px 30px;
+    margin: 8px;
+    border: none;
+    cursor: pointer;
+    transition: var(--transition);
+    border-radius: 12px;
+    background-color: var(--background);
+    color: var(--text-color);
+    font-weight: bold;
+    font-size: 16px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    box-shadow: 
+        8px 8px 16px var(--shadow-dark),
+        -8px -8px 16px var(--shadow-light);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.tab::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: all 0.6s;
+}
+
+.tab:hover::before {
+    left: 100%;
+}
+
+.tab:hover, .tab.active {
+    box-shadow: 
+        inset 5px 5px 10px var(--shadow-dark),
+        inset -5px -5px 10px var(--shadow-light);
+    color: var(--accent-color);
+    transform: translateY(2px);
+}
+
+.tab-content {
+    display: none;
+    background-color: var(--background);
+    padding: 40px;
+    border-radius: var(--border-radius);
+    box-shadow: 
+        inset 8px 8px 16px var(--shadow-dark),
+        inset -8px -8px 16px var(--shadow-light);
+    transition: var(--transition);
+}
+
+.tab-content.active {
+    display: block;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.inventory-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+}
+
+.product-details, .product-list, .login-form, .form-container {
+    flex: 1 1 300px;
+    background-color: var(--background);
+    padding: 25px;
+    border-radius: var(--border-radius);
+    box-shadow: 
+        8px 8px 16px var(--shadow-dark),
+        -8px -8px 16px var(--shadow-light);
+    transition: var(--transition);
+}
+
+.product-details:hover, .product-list:hover, .login-form:hover, .form-container:hover {
+    transform: translateY(-3px);
+    box-shadow: 
+        12px 12px 20px var(--shadow-dark),
+        -12px -12px 20px var(--shadow-light);
+}
+
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+}
+
+th, td {
+    padding: 15px;
+    text-align: left;
+    background-color: var(--background);
+    transition: var(--transition);
+}
+
+th {
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-size: 14px;
+    color: var(--accent-color);
+}
+
+tr:hover td {
+    box-shadow: 
+        inset 5px 5px 10px var(--shadow-dark),
+        inset -5px -5px 10px var(--shadow-light);
+    transform: translateY(2px);
+}
+
+input[type="text"], input[type="number"], input[type="password"], input[type="email"], input[type="date"], select {
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 25px;
+    border: none;
+    border-radius: 12px;
+    background-color: var(--background);
+    color: var(--text-color);
+    font-size: 16px;
+    box-shadow: 
+        inset 5px 5px 10px var(--shadow-dark),
+        inset -5px -5px 10px var(--shadow-light);
+    transition: var(--transition);
+}
+
+input:focus, select:focus {
+    outline: none;
+    box-shadow: 
+        inset 8px 8px 16px var(--shadow-dark),
+        inset -8px -8px 16px var(--shadow-light);
+}
+
+button {
+    background-color: var(--accent-color);
+    color: white;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 16px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    box-shadow: 
+        5px 5px 10px var(--shadow-dark),
+        -5px -5px 10px var(--shadow-light);
+}
+
+button:hover {
+    background-color: var(--accent-hover);
+    box-shadow: 
+        8px 8px 16px var(--shadow-dark),
+        -8px -8px 16px var(--shadow-light);
+    transform: translateY(-2px);
+}
+
+button:active {
+    box-shadow: 
+        inset 5px 5px 10px var(--shadow-dark),
+        inset -5px -5px 10px var(--shadow-light);
+    transform: translateY(2px);
+}
+
+.hidden {
+    display: none;
+}
+
+#userInfo {
+    text-align: center;
+    margin-bottom: 30px;
+    font-weight: bold;
+    font-size: 18px;
+    padding: 15px;
+    background-color: var(--background);
+    border-radius: var(--border-radius);
+    box-shadow: 
+        inset 5px 5px 10px var(--shadow-dark),
+        inset -5px -5px 10px var(--shadow-light);
+    transition: var(--transition);
+}
+
+#userInfo:hover {
+    transform: translateY(-2px);
+    box-shadow: 
+        inset 8px 8px 16px var(--shadow-dark),
+        inset -8px -8px 16px var(--shadow-light);
+}
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: var(--text-color);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 14px;
+}
+
+.error {
+    color: var(--error-color);
+    margin-top: 8px;
+    font-weight: bold;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: rgba(244, 67, 54, 0.1);
+    box-shadow: 
+        inset 3px 3px 5px rgba(244, 67, 54, 0.2),
+        inset -3px -3px 5px rgba(255, 255, 255, 0.5);
+}
+
+.success {
+    color: var(--success-color);
+    margin-top: 8px;
+    font-weight: bold;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: rgba(76, 175, 80, 0.1);
+    box-shadow: 
+        inset 3px 3px 5px rgba(76, 175, 80, 0.2),
+        inset -3px -3px 5px rgba(255, 255, 255, 0.5);
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 30px;
+    }
+
+    .tab {
+        flex: 1 1 calc(50% - 16px);
+    }
+
+    .product-details, .product-list, .login-form, .form-container {
+        flex: 1 1 100%;
+    }
+
+    th, td {
+        padding: 12px;
+    }
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.logo {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+    border-radius: 50%;
+    box-shadow: 
+        5px 5px 10px var(--shadow-dark),
+        -5px -5px 10px var(--shadow-light);
+    padding: 10px;
+    background-color: var(--background);
+    transition: var(--transition);
+}
+
+.logo:hover {
+    transform: scale(1.05);
+    box-shadow: 
+        8px 8px 16px var(--shadow-dark),
+        -8px -8px 16px var(--shadow-light);
+}
+
+header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+h1 {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.dashboard-item {
+    background-color: var(--background);
+    padding: 20px;
+    border-radius: var(--border-radius);
+    box-shadow: 
+        5px 5px 10px var(--shadow-dark),
+        -5px -5px 10px var(--shadow-light);
+    transition: var(--transition);
+}
+
+.dashboard-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 
+        8px 8px 16px var(--shadow-dark),
+        -8px -8px 16px var(--shadow-light);
+}
+
+.dashboard-item h3 {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+
+.dashboard-item p {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: var(--accent-color);
+}
+
+.tabs {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.tab {
+    /* ... (estilos existentes) ... */
+    transition: all 0.3s ease;
+}
+
+.tab.active {
+    background-color: var(--accent-color);
+    color: white;
+}
+
+#toggleTheme {
+    margin-top: 20px;
+}
+
+@media (max-width: 768px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .tabs {
+        flex-direction: column;
+    }
+
+    .tab {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}
+
+/* Animaciones */
+.animate__animated {
+    animation-duration: 0.5s;
+}
+
+/* Modo oscuro */
+.dark-mode .dashboard-item {
+    background-color: var(--background-dark);
+    box-shadow: 
+        5px 5px 10px var(--shadow-dark-dark),
+        -5px -5px 10px var(--shadow-light-dark);
+}
+
+.dark-mode .dashboard-item:hover {
+    box-shadow: 
+        8px 8px 16px var(--shadow-dark-dark),
+        -8px -8px 16px var(--shadow-light-dark);
+}
+
+.dark-mode .dashboard-item p {
+    color: var(--accent-color-dark);
+}
+
+.dark-mode .tab {
+    background-color: var(--background-dark);
+    color: var(--text-color-dark);
+}
+
+.dark-mode .tab.active {
+    background-color: var(--accent-color-dark);
+    color: var(--background-dark);
+}
+
+.tax-controls, .supplier-controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+#taxName, #taxRate, #supplierSearch {
+    flex-grow: 1;
+}
+
+#reportChart {
+    margin-top: 20px;
+    max-width: 100%;
+    height: 300px;
+}
+
+.invoice-actions button, .tax-actions button, .supplier-actions button {
+    padding: 5px 10px;
+    margin-right: 5px;
+    border: none;
+    border-radius: var(--border-radius);
+    background-color: var(--accent-color);
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.invoice-actions button:hover, .tax-actions button:hover, .supplier-actions button:hover {
+    background-color: var(--accent-hover);
+}

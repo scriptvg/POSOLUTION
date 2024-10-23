@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sistema POS Avanzado con Facturación Electrónica para negocios modernos">
+    <title>Sistema POS Avanzado con Facturación Electrónica</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo-container">
+                <img src="/DALL·E-2024-10-05-11.45_1.ico" alt="Logo del Sistema POS" class="logo">
+            </div>
+            <h1><i class="fas fa-cash-register" aria-hidden="true"></i> POSOLUTION </h1>
+        </header>
+        <main>
+            <section id="loginSection" class="login-form">
+                <h2><i class="fas fa-user-lock"></i> Iniciar Sesión</h2>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="username"><i class="fas fa-user"></i> Usuario:</label>
+                        <input type="text" id="username" required autocomplete="username">
+                    </div>
+                    <div class="form-group">
+                        <label for="password"><i class="fas fa-key"></i> Contraseña:</label>
+                        <input type="password" id="password" required autocomplete="current-password">
+                    </div>
+                    <button type="submit" class="btn-primary"><i class="fas fa-sign-in-alt"></i> Iniciar Sesión</button>
+                </form>
+            </section>
+            <section id="mainContent" class="hidden">
+                <nav aria-label="Navegación principal">
+                    <div id="userInfo" aria-live="polite"></div>
+                    <div class="tabs" id="tabsContainer" role="tablist"></div>
+                </nav>
+                <div id="dashboard" class="animate__animated animate__fadeIn">
+                    <h2>Panel de Control</h2>
+                    <div class="dashboard-grid">
+                        <div class="dashboard-item">
+                            <h3>Ventas del día</h3>
+                            <p id="dailySales">₡0.00</p>
+                        </div>
+                        <div class="dashboard-item">
+                            <h3>Productos en stock</h3>
+                            <p id="stockCount">0</p>
+                        </div>
+                        <div class="dashboard-item">
+                            <h3>Facturas pendientes</h3>
+                            <p id="pendingInvoices">0</p>
+                        </div>
+                        <div class="dashboard-item">
+                            <h3>Clientes registrados</h3>
+                            <p id="customerCount">0</p>
+                        </div>
+                    </div>
+                </div>
+                <div id="notifications" class="notifications"></div>
+                <div id="tabContents">
+                    <section id="inventory" class="tab-content" role="tabpanel" aria-labelledby="tab-inventory">
+                        <h2>Inventario</h2>
+                        <div class="inventory-controls">
+                            <input type="text" id="inventorySearch" placeholder="Buscar producto...">
+                            <select id="inventoryFilter">
+                                <option value="">Todos los productos</option>
+                                <option value="low-stock">Bajo stock</option>
+                                <option value="out-of-stock">Sin stock</option>
+                            </select>
+                        </div>
+                        <div class="inventory-container">
+                            <div class="product-details">
+                                <h3>Detalles del Producto</h3>
+                                <form id="productForm">
+                                    <div class="form-group">
+                                        <label for="productName">Nombre:</label>
+                                        <input type="text" id="productName" name="name" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="productPrice">Precio:</label>
+                                        <input type="number" id="productPrice" name="price" step="0.01" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="productStock">Stock:</label>
+                                        <input type="number" id="productStock" name="stock" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="productCategory">Categoría:</label>
+                                        <input type="text" id="productCategory" name="category" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="productBarcode">Código de Barras:</label>
+                                        <input type="text" id="productBarcode" name="barcode" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="productDescription">Descripción:</label>
+                                        <textarea id="productDescription" name="description" rows="3"></textarea>
+                                    </div>
+                                    <button type="submit">Guardar Producto</button>
+                                </form>
+                            </div>
+                            <div class="product-list">
+                                <h3>Lista de Productos</h3>
+                                <div class="table-container">
+                                    <table id="productTable">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Nombre</th>
+                                                <th>Precio</th>
+                                                <th>Stock</th>
+                                                <th>Categoría</th>
+                                                <th>Código de Barras</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- Los productos se insertarán aquí dinámicamente -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <section id="sales" class="tab-content" role="tabpanel" aria-labelledby="tab-sales">
+                        <h2>Ventas</h2>
+                        <div class="sales-container">
+                            <div class="available-products">
+                                <h3>Productos Disponibles</h3>
+                                <div class="table-container">
+                                    <table id="availableProductsTable">
+                                        <thead>
+                                            <tr>
+                                                <th>Nombre</th>
+                                                <th>Precio</th>
+                                                <th>Stock</th>
+                                                <th>Acción</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- Los productos se insertarán aquí dinámicamente -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="cart">
+                                <h3>Carrito de Compras</h3>
+                                <div id="cartItems"></div>
+                                <div class="cart-total">
+                                    <p>Total: ₡<span id="cartTotal">0.00</span></p>
+                                </div>
+                                <button id="checkoutButton">Finalizar Compra</button>
+                            </div>
+                        </div>
+                    </section>
+                    <section id="invoices" class="tab-content" role="tabpanel" aria-labelledby="tab-invoices">
+                        <h2>Facturas</h2>
+                        <div class="table-container">
+                            <table id="invoicesTable">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Cliente</th>
+                                        <th>Total</th>
+                                        <th>Fecha</th>
+                                        <th>Estado</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Las facturas se insertarán aquí dinámicamente -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+                    <section id="taxes" class="tab-content" role="tabpanel" aria-labelledby="tab-taxes">
+                        <h2>Gestión de Impuestos</h2>
+                        <div class="tax-controls">
+                            <input type="text" id="taxName" placeholder="Nombre del impuesto">
+                            <input type="number" id="taxRate" placeholder="Tasa del impuesto">
+                            <button id="addTaxButton">Agregar Impuesto</button>
+                        </div>
+                        <div class="table-container">
+                            <table id="taxesTable">
+                                <thead>
+                                    <tr>
+                                        <th>Nombre</th>
+                                        <th>Tasa</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Los impuestos se insertarán aquí dinámicamente -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+                    <section id="suppliers" class="tab-content" role="tabpanel" aria-labelledby="tab-suppliers">
+                        <h2>Gestión de Proveedores</h2>
+                        <div class="supplier-controls">
+                            <input type="text" id="supplierSearch" placeholder="Buscar proveedor...">
+                            <button id="addSupplierButton">Agregar Proveedor</button>
+                        </div>
+                        <div class="table-container">
+                            <table id="suppliersTable">
+                                <thead>
+                                    <tr>
+                                        <th>Nombre</th>
+                                        <th>Contacto</th>
+                                        <th>Teléfono</th>
+                                        <th>Email</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Los proveedores se insertarán aquí dinámicamente -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+                    <section id="customers" class="tab-content" role="tabpanel" aria-labelledby="tab-customers">
+                        <h2>Clientes</h2>
+                        <div class="customer-controls">
+                            <input type="text" id="customerSearch" placeholder="Buscar cliente...">
+                            <button id="addCustomerButton">Agregar Cliente</button>
+                        </div>
+                        <div class="customer-container">
+                            <div class="customer-details">
+                                <h3>Detalles del Cliente</h3>
+                                <form id="customerForm">
+                                    <div class="form-group">
+                                        <label for="customerName">Nombre:</label>
+                                        <input type="text" id="customerName" name="name" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="customerEmail">Email:</label>
+                                        <input type="email" id="customerEmail" name="email" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="customerPhone">Teléfono:</label>
+                                        <input type="tel" id="customerPhone" name="phone" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="customerIdentification">Identificación:</label>
+                                        <input type="text" id="customerIdentification" name="identification" required>
+                                    </div>
+                                    <button type="submit">Agregar Cliente</button>
+                                </form>
+                            </div>
+                            <div class="customer-list">
+                                <h3>Lista de Clientes</h3>
+                                <div class="table-container">
+                                    <table id="customersTable">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Nombre</th>
+                                                <th>Email</th>
+                                                <th>Teléfono</th>
+                                                <th>Identificación</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- Los clientes se insertarán aquí dinámicamente -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <section id="reports" class="tab-content" role="tabpanel" aria-labelledby="tab-reports">
+                        <h2>Reportes</h2>
+                        <div class="report-controls">
+                            <select id="reportType">
+                                <option value="sales">Reporte de Ventas</option>
+                                <option value="inventory">Reporte de Inventario</option>
+                                <option value="customers">Reporte de Clientes</option>
+                                <option value="taxes">Reporte de Impuestos</option>
+                            </select>
+                            <input type="date" id="reportStartDate">
+                            <input type="date" id="reportEndDate">
+                            <button id="generateReportButton">Generar Reporte</button>
+                        </div>
+                        <div id="reportResult"></div>
+                        <canvas id="reportChart"></canvas>
+                    </section>
+                </div>
+                <button id="logoutButton" class="btn-secondary"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</button>
+                <button id="toggleTheme" class="btn-secondary"><i class="fas fa-adjust"></i> Cambiar Tema</button>
+            </section>
+        </main>
+        <footer>
+            <p>&copy; 2023 Sistema POS Avanzado. Todos los derechos reservados.</p>
+            <nav aria-label="Enlaces del pie de página">
+                <a href="#">Términos y Condiciones</a> |
+                <a href="#">Política de Privacidad</a> |
+                <a href="#">Contacto</a>
+            </nav>
+        </footer>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
